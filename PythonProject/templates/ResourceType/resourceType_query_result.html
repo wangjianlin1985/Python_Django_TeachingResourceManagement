@@ -1,0 +1,48 @@
+{% include 'check_logstate.html' %}
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static '/css/resourceType.css' %}" />
+
+{% csrf_token %}
+<div id="resourceType_manage"></div>
+<div id="resourceType_manage_tool" style="padding:5px;">
+	<div style="margin-bottom:5px;">
+		<a href="#" class="easyui-linkbutton" iconCls="icon-edit-new" plain="true" onclick="resourceType_manage_tool.edit();">修改</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-delete-new" plain="true" onclick="resourceType_manage_tool.remove();">删除</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true"  onclick="resourceType_manage_tool.reload();">刷新</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-redo" plain="true" onclick="resourceType_manage_tool.redo();">取消选择</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-export" plain="true" onclick="resourceType_manage_tool.exportExcel();">导出到excel</a>
+	</div>
+	<div style="padding:0 0 0 7px;color:#333;">
+		<form id="resourceTypeQueryForm" method="get">
+		</form>	
+	</div>
+</div>
+
+<div id="resourceTypeEditDiv">
+	<form id="resourceTypeEditForm" enctype="multipart/form-data"  method="post">
+        {% csrf_token %}
+		<div>
+			<span class="label">类型id:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="resourceType_typeId_edit" name="resourceType.typeId" style="width:200px" />
+			</span>
+		</div>
+		<div>
+			<span class="label">类型名称:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="resourceType_typeName_edit" name="resourceType.typeName" style="width:200px" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">类型描述:</span>
+			<span class="inputControl">
+				<textarea id="resourceType_typeDesc_edit" name="resourceType.typeDesc" rows="8" cols="60"></textarea>
+
+			</span>
+
+		</div>
+	</form>
+</div>
+<script type="text/javascript" src="{% static 'js/ResourceType/resourceType_manage.js' %}"></script>

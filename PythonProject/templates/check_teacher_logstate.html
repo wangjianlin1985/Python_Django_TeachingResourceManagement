@@ -1,0 +1,3 @@
+{% if not request.session.teacherNo %}
+<script>top.location.href='{% url 'Index:login' %}';</script>
+{% endif %}

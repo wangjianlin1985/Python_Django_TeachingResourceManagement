@@ -1,0 +1,117 @@
+{% include 'check_logstate.html' %}
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static '/css/teacher.css' %}" />
+
+{% csrf_token %}
+<div id="teacher_manage"></div>
+<div id="teacher_manage_tool" style="padding:5px;">
+	<div style="margin-bottom:5px;">
+		<a href="#" class="easyui-linkbutton" iconCls="icon-edit-new" plain="true" onclick="teacher_manage_tool.edit();">修改</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-delete-new" plain="true" onclick="teacher_manage_tool.remove();">删除</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true"  onclick="teacher_manage_tool.reload();">刷新</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-redo" plain="true" onclick="teacher_manage_tool.redo();">取消选择</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-export" plain="true" onclick="teacher_manage_tool.exportExcel();">导出到excel</a>
+	</div>
+	<div style="padding:0 0 0 7px;color:#333;">
+		<form id="teacherQueryForm" method="get">
+			教师编号：<input type="text" class="textbox" id="teacherNo" name="teacherNo" style="width:110px" />
+			姓名：<input type="text" class="textbox" id="name" name="name" style="width:110px" />
+			出生日期：<input type="text" id="birthDate" name="birthDate" class="easyui-datebox" editable="false" style="width:100px">
+			职称：<input type="text" class="textbox" id="zhicheng" name="zhicheng" style="width:110px" />
+			联系电话：<input type="text" class="textbox" id="telephone" name="telephone" style="width:110px" />
+			<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="teacher_manage_tool.search();">查询</a>
+		</form>	
+	</div>
+</div>
+
+<div id="teacherEditDiv">
+	<form id="teacherEditForm" enctype="multipart/form-data"  method="post">
+        {% csrf_token %}
+		<div>
+			<span class="label">教师编号:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="teacher_teacherNo_edit" name="teacher.teacherNo" style="width:200px" />
+			</span>
+		</div>
+		<div>
+			<span class="label">登录密码:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="teacher_password_edit" name="teacher.password" style="width:200px" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">姓名:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="teacher_name_edit" name="teacher.name" style="width:200px" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">性别:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="teacher_sex_edit" name="teacher.sex" style="width:200px" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">出生日期:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="teacher_birthDate_edit" name="teacher.birthDate" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">老师照片:</span>
+			<span class="inputControl">
+				<img id="teacher_teacherPhotoImg" width="200px" border="0px"/><br/>
+				<input id="teacher_teacherPhoto" name="teacher.teacherPhoto" type="file" size="50" />
+			</span>
+		</div>
+		<div>
+			<span class="label">职称:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="teacher_zhicheng_edit" name="teacher.zhicheng" style="width:200px" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">联系电话:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="teacher_telephone_edit" name="teacher.telephone" style="width:200px" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">入职日期:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="teacher_comeDate_edit" name="teacher.comeDate" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">家庭地址:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="teacher_address_edit" name="teacher.address" style="width:200px" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">老师介绍:</span>
+			<span class="inputControl">
+				<textarea name="teacher.teacherDesc" id="teacher_teacherDesc_edit" type="text/plain"   style="width:100%;height:500px;"></textarea>
+
+			</span>
+
+		</div>
+	</form>
+</div>
+<script type="text/javascript" src="{% static 'js/Teacher/teacher_manage.js' %}"></script>

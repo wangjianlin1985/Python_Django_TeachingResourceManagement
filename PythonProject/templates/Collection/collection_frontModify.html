@@ -1,0 +1,161 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+  <TITLE>修改资源收藏信息</TITLE>
+  <link href="{% static 'plugins/bootstrap.css' %}" rel="stylesheet">
+  <link href="{% static 'plugins/bootstrap-dashen.css' %}" rel="stylesheet">
+  <link href="{% static 'plugins/font-awesome.css' %}" rel="stylesheet">
+  <link href="{% static 'plugins/animate.css' %}" rel="stylesheet">
+</head>
+<body style="margin-top:70px;"> 
+<div class="container">
+    {% include 'header.html' %}
+	<div class="col-md-9 wow fadeInLeft">
+	<ul class="breadcrumb">
+  		<li><a href="{% url 'Index:index' %}">首页</a></li>
+  		<li class="active">资源收藏信息修改</li>
+	</ul>
+		<div class="row"> 
+      	<form class="form-horizontal" name="collectionEditForm" id="collectionEditForm" enctype="multipart/form-data" method="post"  class="mar_t15">
+            {% csrf_token %}
+		  <div class="form-group">
+			 <label for="collection_collectionId_edit" class="col-md-3 text-right">收藏id:</label>
+			 <div class="col-md-9"> 
+			 	<input type="text" id="collection_collectionId_edit" name="collection.collectionId" class="form-control" placeholder="请输入收藏id" readOnly>
+			 </div>
+		  </div> 
+		  <div class="form-group">
+		  	 <label for="collection_resourceObj_resourceId_edit" class="col-md-3 text-right">收藏的资源:</label>
+		  	 <div class="col-md-9">
+			    <select id="collection_resourceObj_resourceId_edit" name="collection.resourceObj.resourceId" class="form-control">
+			    </select>
+		  	 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="collection_userObj_user_name_edit" class="col-md-3 text-right">收藏用户:</label>
+		  	 <div class="col-md-9">
+			    <select id="collection_userObj_user_name_edit" name="collection.userObj.user_name" class="form-control">
+			    </select>
+		  	 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="collection_collectTime_edit" class="col-md-3 text-right">收藏时间:</label>
+		  	 <div class="col-md-9">
+                <div class="input-group date collection_collectTime_edit col-md-12" data-link-field="collection_collectTime_edit">
+                    <input class="form-control" id="collection_collectTime_edit" name="collection.collectTime" size="16" type="text" value="" placeholder="请选择收藏时间" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+		  	 </div>
+		  </div>
+			  <div class="form-group">
+			  	<span class="col-md-3"></span>
+			  	<span onclick="ajaxCollectionModify();" class="btn btn-primary bottom5 top5">修改</span>
+			  </div>
+		</form> 
+	    <style>#collectionEditForm .form-group {margin-bottom:5px;}  </style>
+      </div>
+   </div>
+</div>
+
+
+{% include 'footer.html' %}
+<script src="{% static 'plugins/jquery.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap.js' %}"></script>
+<script src="{% static 'plugins/wow.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{% static 'plugins/locales/bootstrap-datetimepicker.zh-CN.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jsdate.js' %}"></script>
+<script>
+/*弹出修改资源收藏界面并初始化数据*/
+ function ajaxModifyQuery(collectionId) {
+	$.ajax({
+		url :  "/Collection/update/" + collectionId,
+		type : "get",
+		dataType: "json",
+		success : function (collection, response, status) {
+			if (collection) {
+				$("#collection_collectionId_edit").val(collection.collectionId);
+				$.ajax({
+					url: "/Resource/listAll?csrfmiddlewaretoken=" + $('input[name="csrfmiddlewaretoken"]').val(),
+					type: "get",
+					success: function(resources,response,status) { 
+						$("#collection_resourceObj_resourceId_edit").empty();
+						var html="";
+		        		$(resources).each(function(i,resource){
+		        			html += "<option value='" + resource.resourceId + "'>" + resource.resourceName + "</option>";
+		        		});
+		        		$("#collection_resourceObj_resourceId_edit").html(html);
+		        		$("#collection_resourceObj_resourceId_edit").val(collection.resourceObjPri);
+					}
+				});
+				$.ajax({
+					url: "/UserInfo/listAll?csrfmiddlewaretoken=" + $('input[name="csrfmiddlewaretoken"]').val(),
+					type: "get",
+					success: function(userInfos,response,status) { 
+						$("#collection_userObj_user_name_edit").empty();
+						var html="";
+		        		$(userInfos).each(function(i,userInfo){
+		        			html += "<option value='" + userInfo.user_name + "'>" + userInfo.name + "</option>";
+		        		});
+		        		$("#collection_userObj_user_name_edit").html(html);
+		        		$("#collection_userObj_user_name_edit").val(collection.userObjPri);
+					}
+				});
+				$("#collection_collectTime_edit").val(collection.collectTime);
+			} else {
+				alert("获取信息失败！");
+			}
+		}
+	});
+}
+
+/*ajax方式提交资源收藏信息表单给服务器端修改*/
+function ajaxCollectionModify() {
+	$.ajax({
+		url :  "/Collection/update/" + $("#collection_collectionId_edit").val(),
+		type : "post",
+		dataType: "json",
+		data: new FormData($("#collectionEditForm")[0]),
+		success : function (obj, response, status) {
+            if(obj.success){
+                alert("信息修改成功！");
+                location.reload(true);
+                $("#collectionQueryForm").submit();
+            }else{
+                alert(obj.message);
+            } 
+		},
+		processData: false,
+		contentType: false,
+	});
+}
+
+$(function(){
+        /*小屏幕导航点击关闭菜单*/
+        $('.navbar-collapse a').click(function(){
+            $('.navbar-collapse').collapse('hide');
+        });
+        new WOW().init();
+    /*收藏时间组件*/
+    $('.collection_collectTime_edit').datetimepicker({
+    	language:  'zh-CN',  //语言
+    	format: 'yyyy-mm-dd hh:ii:ss',
+    	weekStart: 1,
+    	todayBtn:  1,
+    	autoclose: 1,
+    	minuteStep: 1,
+    	todayHighlight: 1,
+    	startView: 2,
+    	forceParse: 0
+    });
+    setTimeout(ajaxModifyQuery,100,"{{ collectionId }}");
+ })
+ </script> 
+</body>
+</html>
+

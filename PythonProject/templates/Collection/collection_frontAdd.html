@@ -1,0 +1,149 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+<title>资源收藏添加</title>
+<link href="{% static 'plugins/bootstrap.css' %}" rel="stylesheet">
+<link href="{% static 'plugins/bootstrap-dashen.css' %}" rel="stylesheet">
+<link href="{% static 'plugins/font-awesome.css' %}" rel="stylesheet">
+<link href="{% static 'plugins/animate.css' %}" rel="stylesheet">
+<link href="{% static 'plugins/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" media="screen">
+</head>
+<body style="margin-top:70px;">
+{% include 'header.html' %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 wow fadeInUp" data-wow-duration="0.5s">
+			<div>
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs" role="tablist">
+			    	<li role="presentation" ><a href="{% url 'Collection:frontList' %}">资源收藏列表</a></li>
+			    	<li role="presentation" class="active"><a href="#collectionAdd" aria-controls="collectionAdd" role="tab" data-toggle="tab">添加资源收藏</a></li>
+				</ul>
+				<!-- Tab panes -->
+				<div class="tab-content">
+				    <div role="tabpanel" class="tab-pane" id="collectionList">
+				    </div>
+				    <div role="tabpanel" class="tab-pane active" id="collectionAdd"> 
+				      	<form class="form-horizontal" name="collectionAddForm" id="collectionAddForm" enctype="multipart/form-data" method="post"  class="mar_t15">
+				    {% csrf_token %}
+						  <div class="form-group">
+						  	 <label for="collection_resourceObj_resourceId" class="col-md-2 text-right">收藏的资源:</label>
+						  	 <div class="col-md-8">
+							    <select id="collection_resourceObj_resourceId" name="collection.resourceObj.resourceId" class="form-control">
+                            {% for resource in resources %}
+                            <option value="{{ resource.resourceId }}">{{ resource.resourceName }}</option>
+                            {% endfor %}
+							    </select>
+						  	 </div>
+						  </div>
+						  <div class="form-group">
+						  	 <label for="collection_userObj_user_name" class="col-md-2 text-right">收藏用户:</label>
+						  	 <div class="col-md-8">
+							    <select id="collection_userObj_user_name" name="collection.userObj.user_name" class="form-control">
+                            {% for userInfo in userInfos %}
+                            <option value="{{ userInfo.user_name }}">{{ userInfo.name }}</option>
+                            {% endfor %}
+							    </select>
+						  	 </div>
+						  </div>
+						  <div class="form-group">
+						  	 <label for="collection_collectTimeDiv" class="col-md-2 text-right">收藏时间:</label>
+						  	 <div class="col-md-8">
+				                <div id="collection_collectTimeDiv" class="input-group date collection_collectTime col-md-12" data-link-field="collection_collectTime">
+				                    <input class="form-control" id="collection_collectTime" name="collection.collectTime" size="16" type="text" value="" placeholder="请选择收藏时间" readonly>
+				                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+				                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+				                </div>
+						  	 </div>
+						  </div>
+				          <div class="form-group">
+				             <span class="col-md-2"></span>
+				             <span onclick="ajaxCollectionAdd();" class="btn btn-primary bottom5 top5">添加</span>
+				          </div>
+						</form> 
+				        <style>#collectionAddForm .form-group {margin:10px;}  </style>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> 
+</div>
+
+{% include 'footer.html' %}
+<script src="{% static 'plugins/jquery.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap.js' %}"></script>
+<script src="{% static 'plugins/wow.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrapvalidator/js/bootstrapValidator.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/bootstrap-datetimepicker.min.js' %}" charset="UTF-8"></script>
+<script type="text/javascript" src="{% static 'plugins/locales/bootstrap-datetimepicker.zh-CN.js' %}" charset="UTF-8"></script>
+<script>
+	//提交添加资源收藏信息
+	function ajaxCollectionAdd() { 
+		//提交之前先验证表单
+		$("#collectionAddForm").data('bootstrapValidator').validate();
+		if(!$("#collectionAddForm").data('bootstrapValidator').isValid()){
+			return;
+		}
+		jQuery.ajax({
+			type : "post",
+			url : "{% url 'Collection:frontAdd' %}",
+			dataType : "json" , 
+			data: new FormData($("#collectionAddForm")[0]),
+			success : function(obj) {
+				if(obj.success){ 
+					alert("保存成功！");
+					location.reload();
+				} else {
+					alert(obj.message);
+				}
+			},
+			processData: false, 
+			contentType: false, 
+		});
+	} 
+$(function(){
+	/*小屏幕导航点击关闭菜单*/
+    $('.navbar-collapse a').click(function(){
+        $('.navbar-collapse').collapse('hide');
+    });
+    new WOW().init();
+	//验证资源收藏添加表单字段
+	$('#collectionAddForm').bootstrapValidator({
+		feedbackIcons: {
+			valid: 'glyphicon glyphicon-ok',
+			invalid: 'glyphicon glyphicon-remove',
+			validating: 'glyphicon glyphicon-refresh'
+		},
+		fields: {
+			"collection.collectTime": {
+				validators: {
+					notEmpty: {
+						message: "收藏时间不能为空",
+					}
+				}
+			},
+		}
+	}); 
+	//收藏时间组件
+	$('#collection_collectTimeDiv').datetimepicker({
+		language:  'zh-CN',  //显示语言
+		format: 'yyyy-mm-dd hh:ii:ss',
+		weekStart: 1,
+		todayBtn:  1,
+		autoclose: 1,
+		minuteStep: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0
+	}).on('hide',function(e) {
+		//下面这行代码解决日期组件改变日期后不验证的问题
+		$('#collectionAddForm').data('bootstrapValidator').updateStatus('collection.collectTime', 'NOT_VALIDATED',null).validateField('collection.collectTime');
+	});
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+  <TITLE>修改老师信息</TITLE>
+  <link href="{% static 'plugins/bootstrap.css' %}" rel="stylesheet">
+  <link href="{% static 'plugins/bootstrap-dashen.css' %}" rel="stylesheet">
+  <link href="{% static 'plugins/font-awesome.css' %}" rel="stylesheet">
+  <link href="{% static 'plugins/animate.css' %}" rel="stylesheet">
+</head>
+<body style="margin-top:70px;"> 
+<div class="container">
+    {% include 'header.html' %}
+	<div class="col-md-9 wow fadeInLeft">
+	<ul class="breadcrumb">
+  		<li><a href="{% url 'Index:index' %}">首页</a></li>
+  		<li class="active">老师信息修改</li>
+	</ul>
+		<div class="row"> 
+      	<form class="form-horizontal" name="teacherEditForm" id="teacherEditForm" enctype="multipart/form-data" method="post"  class="mar_t15">
+            {% csrf_token %}
+		  <div class="form-group">
+			 <label for="teacher_teacherNo_edit" class="col-md-3 text-right">教师编号:</label>
+			 <div class="col-md-9"> 
+			 	<input type="text" id="teacher_teacherNo_edit" name="teacher.teacherNo" class="form-control" placeholder="请输入教师编号" readOnly>
+			 </div>
+		  </div> 
+		  <div class="form-group">
+		  	 <label for="teacher_password_edit" class="col-md-3 text-right">登录密码:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="teacher_password_edit" name="teacher.password" class="form-control" placeholder="请输入登录密码">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_name_edit" class="col-md-3 text-right">姓名:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="teacher_name_edit" name="teacher.name" class="form-control" placeholder="请输入姓名">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_sex_edit" class="col-md-3 text-right">性别:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="teacher_sex_edit" name="teacher.sex" class="form-control" placeholder="请输入性别">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_birthDate_edit" class="col-md-3 text-right">出生日期:</label>
+		  	 <div class="col-md-9">
+                <div class="input-group date teacher_birthDate_edit col-md-12" data-link-field="teacher_birthDate_edit" data-link-format="yyyy-mm-dd">
+                    <input class="form-control" id="teacher_birthDate_edit" name="teacher.birthDate" size="16" type="text" value="" placeholder="请选择出生日期" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+		  	 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_teacherPhoto_edit" class="col-md-3 text-right">老师照片:</label>
+		  	 <div class="col-md-9">
+			    <img  class="img-responsive" id="teacher_teacherPhotoImg" border="0px"/><br/>
+			    <input id="teacher_teacherPhoto" name="teacher.teacherPhoto" type="file" size="50" />
+		  	 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_zhicheng_edit" class="col-md-3 text-right">职称:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="teacher_zhicheng_edit" name="teacher.zhicheng" class="form-control" placeholder="请输入职称">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_telephone_edit" class="col-md-3 text-right">联系电话:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="teacher_telephone_edit" name="teacher.telephone" class="form-control" placeholder="请输入联系电话">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_comeDate_edit" class="col-md-3 text-right">入职日期:</label>
+		  	 <div class="col-md-9">
+                <div class="input-group date teacher_comeDate_edit col-md-12" data-link-field="teacher_comeDate_edit" data-link-format="yyyy-mm-dd">
+                    <input class="form-control" id="teacher_comeDate_edit" name="teacher.comeDate" size="16" type="text" value="" placeholder="请选择入职日期" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+		  	 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_address_edit" class="col-md-3 text-right">家庭地址:</label>
+		  	 <div class="col-md-9">
+			    <input type="text" id="teacher_address_edit" name="teacher.address" class="form-control" placeholder="请输入家庭地址">
+			 </div>
+		  </div>
+		  <div class="form-group">
+		  	 <label for="teacher_teacherDesc_edit" class="col-md-3 text-right">老师介绍:</label>
+		  	 <div class="col-md-9">
+			    <textarea name="teacher.teacherDesc" id="teacher_teacherDesc_edit" type="text/plain"   style="width:100%;height:350px;"></textarea>
+			 </div>
+		  </div>
+			  <div class="form-group">
+			  	<span class="col-md-3"></span>
+			  	<span onclick="ajaxTeacherModify();" class="btn btn-primary bottom5 top5">修改</span>
+			  </div>
+		</form> 
+	    <style>#teacherEditForm .form-group {margin-bottom:5px;}  </style>
+      </div>
+   </div>
+</div>
+
+
+{% include 'footer.html' %}
+<script src="{% static 'plugins/jquery.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap.js' %}"></script>
+<script src="{% static 'plugins/wow.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{% static 'plugins/locales/bootstrap-datetimepicker.zh-CN.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jsdate.js' %}"></script>
+<script src="{% static 'tiny_mce/tiny_mce.js' %}"></script>
+<script>
+/*弹出修改老师界面并初始化数据*/
+ function ajaxModifyQuery(teacherNo) {
+	$.ajax({
+		url :  "/Teacher/update/" + teacherNo,
+		type : "get",
+		dataType: "json",
+		success : function (teacher, response, status) {
+			if (teacher) {
+				$("#teacher_teacherNo_edit").val(teacher.teacherNo);
+				$("#teacher_password_edit").val(teacher.password);
+				$("#teacher_name_edit").val(teacher.name);
+				$("#teacher_sex_edit").val(teacher.sex);
+				$("#teacher_birthDate_edit").val(teacher.birthDate);
+				$("#teacher_teacherPhotoImg").attr("src", teacher.teacherPhoto);
+				$("#teacher_zhicheng_edit").val(teacher.zhicheng);
+				$("#teacher_telephone_edit").val(teacher.telephone);
+				$("#teacher_comeDate_edit").val(teacher.comeDate);
+				$("#teacher_address_edit").val(teacher.address);
+				tinyMCE.editors['teacher_teacherDesc_edit'].setContent(teacher.teacherDesc);
+			} else {
+				alert("获取信息失败！");
+			}
+		}
+	});
+}
+
+/*ajax方式提交老师信息表单给服务器端修改*/
+function ajaxTeacherModify() {
+    $("#teacher_teacherDesc_edit").text(tinyMCE.editors['teacher_teacherDesc_edit'].getContent());
+	$.ajax({
+		url :  "/Teacher/update/" + $("#teacher_teacherNo_edit").val(),
+		type : "post",
+		dataType: "json",
+		data: new FormData($("#teacherEditForm")[0]),
+		success : function (obj, response, status) {
+            if(obj.success){
+                alert("信息修改成功！");
+                location.reload(true);
+                $("#teacherQueryForm").submit();
+            }else{
+                alert(obj.message);
+            } 
+		},
+		processData: false,
+		contentType: false,
+	});
+}
+
+$(function(){
+        /*小屏幕导航点击关闭菜单*/
+        $('.navbar-collapse a').click(function(){
+            $('.navbar-collapse').collapse('hide');
+        });
+        new WOW().init();
+    /*出生日期组件*/
+    $('.teacher_birthDate_edit').datetimepicker({
+    	language:  'zh-CN',  //语言
+    	format: 'yyyy-mm-dd',
+    	minView: 2,
+    	weekStart: 1,
+    	todayBtn:  1,
+    	autoclose: 1,
+    	minuteStep: 1,
+    	todayHighlight: 1,
+    	startView: 2,
+    	forceParse: 0
+    });
+    /*入职日期组件*/
+    $('.teacher_comeDate_edit').datetimepicker({
+    	language:  'zh-CN',  //语言
+    	format: 'yyyy-mm-dd',
+    	minView: 2,
+    	weekStart: 1,
+    	todayBtn:  1,
+    	autoclose: 1,
+    	minuteStep: 1,
+    	todayHighlight: 1,
+    	startView: 2,
+    	forceParse: 0
+    });
+    //实例化老师介绍编辑器
+    tinyMCE.init({
+        selector: "#teacher_teacherDesc_edit",
+        theme: 'advanced',
+        language: "zh",
+        strict_loading_mode: 1,
+    });
+    setTimeout(ajaxModifyQuery,100,"{{ teacherNo }}");
+ })
+ </script> 
+</body>
+</html>
+

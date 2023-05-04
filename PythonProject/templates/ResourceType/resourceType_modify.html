@@ -1,0 +1,35 @@
+{% load staticfiles %}
+{% include 'check_logstate.html' %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/resourceType.css' %}" />
+<div id="resourceType_EditDiv">
+	<form id="resourceTypeModifyForm" enctype="multipart/form-data"  method="post">
+        {% csrf_token %}
+		<div>
+			<span class="label">类型id:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="resourceType_typeId_modify" name="resourceType.typeId" value="{{ typeId }}" style="width:200px" />
+			</span>
+		</div>
+
+		<div>
+			<span class="label">类型名称:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="resourceType_typeName_modify" name="resourceType.typeName" style="width:200px" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">类型描述:</span>
+			<span class="inputControl">
+				<textarea id="resourceType_typeDesc_modify" name="resourceType.typeDesc" rows="8" cols="60"></textarea>
+
+			</span>
+
+		</div>
+		<div class="operation">
+			<a id="resourceTypeModifyButton" class="easyui-linkbutton">更新</a> 
+		</div>
+	</form>
+</div>
+<script src="{% static 'js/ResourceType/resourceType_modify.js' %}"></script>

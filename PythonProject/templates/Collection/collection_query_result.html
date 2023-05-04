@@ -1,0 +1,56 @@
+{% include 'check_logstate.html' %}
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static '/css/collection.css' %}" />
+
+{% csrf_token %}
+<div id="collection_manage"></div>
+<div id="collection_manage_tool" style="padding:5px;">
+	<div style="margin-bottom:5px;">
+		<a href="#" class="easyui-linkbutton" iconCls="icon-edit-new" plain="true" onclick="collection_manage_tool.edit();">修改</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-delete-new" plain="true" onclick="collection_manage_tool.remove();">删除</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true"  onclick="collection_manage_tool.reload();">刷新</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-redo" plain="true" onclick="collection_manage_tool.redo();">取消选择</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-export" plain="true" onclick="collection_manage_tool.exportExcel();">导出到excel</a>
+	</div>
+	<div style="padding:0 0 0 7px;color:#333;">
+		<form id="collectionQueryForm" method="get">
+			收藏的资源：<input class="textbox" type="text" id="resourceObj_resourceId_query" name="resourceObj.resourceId" style="width: auto"/>
+			收藏用户：<input class="textbox" type="text" id="userObj_user_name_query" name="userObj.user_name" style="width: auto"/>
+			收藏时间：<input type="text" id="collectTime" name="collectTime" class="easyui-datebox" editable="false" style="width:100px">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="collection_manage_tool.search();">查询</a>
+		</form>	
+	</div>
+</div>
+
+<div id="collectionEditDiv">
+	<form id="collectionEditForm" enctype="multipart/form-data"  method="post">
+        {% csrf_token %}
+		<div>
+			<span class="label">收藏id:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="collection_collectionId_edit" name="collection.collectionId" style="width:200px" />
+			</span>
+		</div>
+		<div>
+			<span class="label">收藏的资源:</span>
+			<span class="inputControl">
+				<input class="textbox"  id="collection_resourceObj_resourceId_edit" name="collection.resourceObj.resourceId" style="width: auto"/>
+			</span>
+		</div>
+		<div>
+			<span class="label">收藏用户:</span>
+			<span class="inputControl">
+				<input class="textbox"  id="collection_userObj_user_name_edit" name="collection.userObj.user_name" style="width: auto"/>
+			</span>
+		</div>
+		<div>
+			<span class="label">收藏时间:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="collection_collectTime_edit" name="collection.collectTime" />
+
+			</span>
+
+		</div>
+	</form>
+</div>
+<script type="text/javascript" src="{% static 'js/Collection/collection_manage.js' %}"></script>

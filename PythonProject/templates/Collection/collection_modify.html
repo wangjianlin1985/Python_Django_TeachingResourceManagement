@@ -1,0 +1,39 @@
+{% load staticfiles %}
+{% include 'check_logstate.html' %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/collection.css' %}" />
+<div id="collection_EditDiv">
+	<form id="collectionModifyForm" enctype="multipart/form-data"  method="post">
+        {% csrf_token %}
+		<div>
+			<span class="label">收藏id:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="collection_collectionId_modify" name="collection.collectionId" value="{{ collectionId }}" style="width:200px" />
+			</span>
+		</div>
+
+		<div>
+			<span class="label">收藏的资源:</span>
+			<span class="inputControl">
+				<input class="textbox"  id="collection_resourceObj_resourceId_modify" name="collection.resourceObj.resourceId" style="width: auto"/>
+			</span>
+		</div>
+		<div>
+			<span class="label">收藏用户:</span>
+			<span class="inputControl">
+				<input class="textbox"  id="collection_userObj_user_name_modify" name="collection.userObj.user_name" style="width: auto"/>
+			</span>
+		</div>
+		<div>
+			<span class="label">收藏时间:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="collection_collectTime_modify" name="collection.collectTime" />
+
+			</span>
+
+		</div>
+		<div class="operation">
+			<a id="collectionModifyButton" class="easyui-linkbutton">更新</a> 
+		</div>
+	</form>
+</div>
+<script src="{% static 'js/Collection/collection_modify.js' %}"></script>
